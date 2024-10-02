@@ -1,9 +1,10 @@
 import React from 'react'
 import PostureDetection from '../_components/Posture';
 
+
 const page = () => {
   return (
-    <div>
+    <div className='flex flex-col'>
       <PostureDetection/>
     </div>
   )

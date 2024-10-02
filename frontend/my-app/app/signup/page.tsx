@@ -92,7 +92,7 @@ export default function Page() {
             />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="twitterpassword" className="text-neutral-300">Your Twitter password</Label>
+            <Label htmlFor="twitterpassword" className="text-neutral-300">Confirm password</Label>
             <Input
               id="twitterpassword"
               placeholder="••••••••"

@@ -1,5 +1,5 @@
 "use client";
-import React, {useRef, useState, useEffect } from "react";
+import React, {useRef, useState, useEffect ,useSearchParams} from "react";
 import { Pose } from "@mediapipe/pose";
 import {
   drawConnectors,
@@ -9,32 +9,44 @@ import {
 import { Camera } from "@mediapipe/camera_utils";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
+
+
 
 
 const Posture = () => {
-  // <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
-  // const [isWarn,setIsWarn]=useState(false);
-  // const audioRef=useRef<HTMLAudioElement>(null);
 
-  // useEffect(()=>{
-  //   const timer=setTimeout(()=>{
-  //     setIsWarn(true);
-  //   },3000);
-  //   return ()=>clearTimeout(timer);
-  // },[]);
+    const exDict = {
+        "Biceps Curl": 1,
+        "Overhead Press": 2,
+        "Squats": 3,
+        "Plank": 4,
+        "Tricep Dips": 5,
+        "Pushups":6
+      };
 
-  // useEffect(()=>{
-  //   if(isWarn && audioRef.current){
-  //     audioRef.current.play();
-  //   }
-  // },[isWarn]);
+  const { searchParams } = new URL(window.location.href); 
+  const exName=searchParams.get("exerciseId")||'';
+  const exSets=searchParams.get("sets")||'';
+  const exReps=searchParams.get("reps")||'';
+  console.log("Ex-Name:",exName);
+  console.log("Ex-Sets:",exSets);
+  console.log("Ex-Reps:",exReps);
+
+  let hasReloaded = false;
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const canvasCtx = useRef(null);
   let beepSound=null;
-  var exercise = 2;
-  var sets = 4;
-  var reps = 1;
+
+  let exercise = exDict[exName];
+  let reps = exSets;
+  let sets = exReps;
+  console.log(exercise,reps,sets);
+
+  const router=useRouter();
+ 
   var count = 0;
   var state = "down";
   const showToast = (message, color) => {
@@ -172,7 +184,7 @@ const Posture = () => {
     const handleStatement2 = (str) => {
       canvasCtx.current.font = "24px Arial";
       canvasCtx.fillStyle = "black";
-      canvasCtx.current.fillText("Reps:" + String(str), 60, 100);
+      canvasCtx.current.fillText("Sets:" + String(str), 60, 100);
     };
 
     const onResults = (results) => {
@@ -231,6 +243,7 @@ const Posture = () => {
               if (count >= sets) {
                 if (reps == 1) {
                   handleStatement("Exercise Completed");
+                  router.push(`/exercise?exerciseName=${encodeURIComponent(exName)}&status=${encodeURIComponent(true)}`);
                 }
                 count = 1;
                 reps = reps - 1;
@@ -290,7 +303,7 @@ const Posture = () => {
                 count = count + 1;
                 if (count >= sets) {
                   if (reps === 1) {
-                    handleStatement("Exercise Completed");
+                    handleStatement("d");
                   }
                   count = 1;
                   reps = reps - 1;
@@ -331,6 +344,7 @@ const Posture = () => {
             if (count >= sets) {
               if (reps == 1) {
                 handleStatement("Exercise Completed");
+                router.push(`/exercise?exerciseName=${encodeURIComponent(exName)}&status=${encodeURIComponent(true)}`);
               }
               count = 1;
               reps = reps - 1;
@@ -445,7 +459,7 @@ const Posture = () => {
               state = "down";
               if (count >= sets) {
                 if (reps == 1) {
-                  handleStatement("Exercise Completed");
+                  handleStatement("d");
                 }
                 count = 1;
                 reps = reps - 1;
@@ -494,6 +508,7 @@ const Posture = () => {
               if (count >= sets) {
                 if (reps == 1) {
                   handleStatement("Exercise Completed");
+                  router.push(`/exercise?exerciseName=${encodeURIComponent(exName)}&status=${encodeURIComponent(true)}`);
                 }
                 count = 1;
                 reps = reps - 1;
